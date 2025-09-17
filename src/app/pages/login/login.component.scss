@@ -1,0 +1,329 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #ffffff;
+  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.login-center {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand .logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 20px;
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.brand .logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.login-container {
+  width: 100%;
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+  border-radius: 20px 20px 0 0;
+}
+
+.login-container h2 {
+  margin-top: 0;
+  margin-bottom: 32px;
+  color: var(--color-primary-dark);
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  right: 16px; /* Changed from left to right for RTL */
+  font-size: 18px;
+  color: var(--muted-text);
+  z-index: 1;
+}
+
+input {
+  width: 100%;
+  padding: 16px 50px 16px 20px; /* Changed padding for RTL (right padding for icon) */
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+input:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(246, 184, 25, 0.1);
+}
+
+input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(246, 184, 25, 0.2);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+input::placeholder {
+  color: #999;
+  font-weight: 400;
+}
+
+button {
+  margin-top: 32px;
+  width: 100%;
+  padding: 18px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, var(--color-primary), #f4a500);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(246, 184, 25, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:hover {
+  filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(246, 184, 25, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(246, 184, 25, 0.3);
+}
+
+button[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(246, 184, 25, 0.2);
+}
+
+button[disabled]:hover {
+  transform: none;
+  filter: none;
+  box-shadow: 0 2px 8px rgba(246, 184, 25, 0.2);
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  margin-top: 20px;
+  padding: 16px;
+  color: #d32f2f;
+  background: linear-gradient(135deg, rgba(211, 47, 47, 0.1), rgba(211, 47, 47, 0.05));
+  border: 1px solid rgba(211, 47, 47, 0.2);
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 500;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: 16px;
+  }
+  
+  .login-center {
+    max-width: 100%;
+  }
+  
+  .login-container {
+    padding: 32px 24px;
+  }
+  
+  .login-container h2 {
+    font-size: 1.75rem;
+    margin-bottom: 28px;
+  }
+  
+  .brand .logo {
+    width: 100px;
+    height: 100px;
+  }
+  
+  input {
+    padding: 14px 45px 14px 18px;
+  }
+  
+  button {
+    padding: 16px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 12px;
+  }
+  
+  .login-container {
+    padding: 24px 20px;
+  }
+  
+  .login-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+  }
+  
+  .brand .logo {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  input {
+    padding: 12px 40px 12px 16px;
+    font-size: 0.95rem;
+  }
+  
+  button {
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Flash message styles */
+.flash {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  text-align: center;
+  font-weight: 600;
+}
+
+.flash.warning {
+  background: #fff7e6;
+  border-color: #ffe58f;
+  color: #ad6800;
+}
+
+.flash.error {
+  background: #fff1f0;
+  border-color: #ffccc7;
+  color: #a8071a;
+}
+
+.flash.success {
+  background: #f6ffed;
+  border-color: #b7eb8f;
+  color: #237804;
+}

@@ -1,0 +1,188 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>تقرير شهري للموظف</h1>
+  </div>
+
+  <div class="card filter-card">
+    <div class="filter-form">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="user">الموظف</label>
+          <select id="user" [(ngModel)]="form.user_id" class="form-control">
+            <option [ngValue]="">اختر الموظف</option>
+            <option *ngFor="let user of users" [ngValue]="user.id">{{ user.full_name }}</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="month">الشهر</label>
+          <select id="month" [(ngModel)]="form.month" class="form-control">
+            <option *ngFor="let m of months" [ngValue]="m.id">{{ m.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="year">السنة</label>
+          <select id="year" [(ngModel)]="form.year" class="form-control">
+            <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <app-button 
+            (btnClick)="generateReport()" 
+            [loading]="loadingReport"
+            [disabled]="loading || !form.user_id">
+            عرض التقرير
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <span>⚠️</span>
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <app-spinner></app-spinner>
+  </div>
+
+  <div *ngIf="!loading && reportData.length > 0" class="report-container">
+    <div class="report-summary">
+      <h3>ملخص التقرير</h3>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="label">الشهر:</span>
+          <span class="value">{{ getMonthName(form.month) }} {{ form.year }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">إجمالي ساعات العمل:</span>
+          <span class="value">{{ totalHours | number:'1.0-2' }} ساعة</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>التاريخ</th>
+            <th>اليوم</th>
+            <th>ساعات العمل</th>
+            <th>التفاصيل</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let day of reportData" 
+              [class.weekend]="isWeekend(day.date)"
+              [class.no-records]="!day.records || day.records.length === 0"
+              [class.single-record]="day.records && day.records.length === 1">
+            <td>{{ day.date | date:'yyyy/MM/dd' }}</td>
+            <td>{{ getDayName(day.date) }}</td>
+            <td>{{ day.total_hours | number:'1.0-2' }} ساعة</td>
+            <td>
+              <div *ngIf="day.records?.length > 0" class="records-list">
+                <div *ngFor="let record of day.records" class="record-item" [class.check-in]="record.attendance_type_id === 'check_in'">
+                  <span class="record-type">{{ getRecordType(record.attendance_type_id) }}</span>
+                  <span class="record-time">{{ formatDateTime(record.recorded_at) }}</span>
+                  <span *ngIf="record.notes" class="record-notes" [title]="record.notes">
+                    <i class="fas fa-sticky-note"></i>
+                  </span>
+                </div>
+              </div>
+              <span *ngIf="!day.records || day.records.length === 0">لا توجد سجلات</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && reportData.length === 0 && form.user_id" class="no-data">
+    <p>لا توجد بيانات متاحة للعرض</p>
+  </div>
+
+  <!-- Salary Information Section -->
+  <div *ngIf="salaryData" class="salary-card card">
+    <h3>تفاصيل المرتب</h3>
+    
+    <div *ngIf="loadingSalary" class="loading-container">
+      <app-spinner></app-spinner>
+    </div>
+    
+    <div *ngIf="salaryError" class="error-message">
+      <span>⚠️</span>
+      <p>{{ salaryError }}</p>
+    </div>
+
+    <div *ngIf="!loadingSalary && !salaryError" class="salary-details">
+      <div class="salary-row">
+        <div class="salary-group">
+          <h4>الراتب الأساسي</h4>
+          <div class="salary-value">{{ salaryData.base_salary | number:'1.2-2' }} ج.م</div>
+        </div>
+        
+        <div class="salary-group">
+          <h4>إجمالي أيام الشهر</h4>
+          <div class="salary-value">{{ salaryData.days_in_month }}</div>
+        </div>
+        
+        <div class="salary-group">
+          <h4>أيام العمل الفعلية</h4>
+          <div class="salary-value">{{ salaryData.working_days }}</div>
+        </div>
+      </div>
+
+      <div class="salary-row">
+        <div class="salary-group">
+          <h4>أيام الحضور</h4>
+          <div class="salary-value">{{ salaryData.present_days }}</div>
+        </div>
+        
+        <div class="salary-group">
+          <h4>أيام الغياب</h4>
+          <div class="salary-value">{{ salaryData.absent_days }}</div>
+        </div>
+        
+        <div class="salary-group">
+          <h4>أيام الإجازة الرسمية</h4>
+          <div class="salary-value">{{ salaryData.official_off_days }}</div>
+        </div>
+      </div>
+
+      <div class="salary-row">
+        <div class="salary-group">
+          <h4>ساعات العمل الفعلية</h4>
+          <div class="salary-value">{{ (salaryData.worked_minutes / 60) | number:'1.0-2' }} ساعة</div>
+        </div>
+        
+        <div class="salary-group">
+          <h4>الدقائق الإضافية</h4>
+          <div class="salary-value">{{ salaryData.extra_minutes }} دقيقة</div>
+        </div>
+        
+        <div class="salary-group">
+          <h4>الدقائق الناقصة</h4>
+          <div class="salary-value">{{ salaryData.missing_minutes }} دقيقة</div>
+        </div>
+      </div>
+
+      <div class="salary-totals">
+        <div class="total-row">
+          <span class="total-label">إجمالي الإضافات:</span>
+          <span class="total-value">{{ salaryData.additions | number:'1.2-2' }} ج.م</span>
+        </div>
+        <div class="total-row">
+          <span class="total-label">إجمالي الخصومات:</span>
+          <span class="total-value">{{ salaryData.deductions | number:'1.2-2' }} ج.م</span>
+        </div>
+        <div class="total-row final-salary">
+          <span class="total-label">صافي الراتب:</span>
+          <span class="total-value">{{ salaryData.final_salary | number:'1.2-2' }} ج.م</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

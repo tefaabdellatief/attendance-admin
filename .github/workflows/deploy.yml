@@ -3,7 +3,7 @@ name: Deploy Angular Dashboard to GitHub Pages
 on:
   push:
     branches:
-      - master   # Run this workflow when pushing to master branch
+      - main
 
 jobs:
   build-deploy:
@@ -16,10 +16,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20.19.0
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Angular app
         run: npm run build -- --configuration production --base-href=/${{ github.event.repository.name }}/

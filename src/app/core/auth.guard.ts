@@ -5,5 +5,5 @@ import { SupabaseService } from './supabase.service';
 export const authGuard: CanActivateFn = (): boolean | UrlTree => {
   const router = inject(Router);
   const auth = inject(SupabaseService);
-  return auth.isLoggedIn() ? true : router.parseUrl('/login');
+  return auth.isLoggedIn() ? true : router.createUrlTree(['login']);
 };

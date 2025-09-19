@@ -34,6 +34,11 @@ export class LoginComponent implements OnInit {
       this.flashMessage = payload.message;
       this.flashType = payload.type ?? 'info';
     }
+
+    // If already authenticated, go to dashboard
+    if (this.sb.isLoggedIn()) {
+      this.router.navigate(['dashboard']);
+    }
   }
 
   async submit() {
@@ -49,7 +54,8 @@ export class LoginComponent implements OnInit {
       }
       // Clear any remaining flash message once logged in
       this.flash.clear();
-      this.router.navigateByUrl('/dashboard');
+      // Navigate to dashboard respecting base href
+      this.router.navigate(['dashboard']);
     } catch (e: any) {
       this.error = e?.message ?? 'فشل تسجيل الدخول';
     } finally {

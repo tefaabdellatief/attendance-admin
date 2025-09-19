@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/supabase.service';
 import { SpinnerComponent } from '../../../core/ui/components/spinner/spinner.component';
@@ -306,7 +306,7 @@ export class AttendanceTypesListComponent implements OnInit {
   viewModalVisible = false;
   selectedType: any = null;
 
-  constructor(private sb: SupabaseService) {}
+  constructor(private sb: SupabaseService, private router: Router) {}
 
   async ngOnInit() {
     await this.loadTypes();
@@ -351,12 +351,12 @@ export class AttendanceTypesListComponent implements OnInit {
   }
 
   navigateToNew() {
-    window.location.href = '/attendance-types/new';
+    this.router.navigate(['attendance-types', 'new']);
   }
 
   editType(type: any) {
     if (type.id) {
-      window.location.href = `/attendance-types/edit/${type.id}`;
+      this.router.navigate(['attendance-types', 'edit', type.id]);
     }
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/supabase.service';
 import { SpinnerComponent } from '../../../core/ui/components/spinner/spinner.component';
@@ -603,7 +603,7 @@ export class ShiftsListComponent implements OnInit {
   updatingUserShifts = false;
   showError = false;
 
-  constructor(private sb: SupabaseService) {}
+  constructor(private sb: SupabaseService, private router: Router) {}
 
   async ngOnInit() {
     await this.loadShifts();
@@ -651,12 +651,12 @@ export class ShiftsListComponent implements OnInit {
   }
 
   navigateToNew() {
-    window.location.href = '/shifts/new';
+    this.router.navigate(['shifts', 'new']);
   }
 
   editShift(shift: any) {
     if (shift.id) {
-      window.location.href = `/shifts/edit/${shift.id}`;
+      this.router.navigate(['shifts', 'edit', shift.id]);
     }
   }
 

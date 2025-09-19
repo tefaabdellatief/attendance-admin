@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/supabase.service';
 import { SpinnerComponent } from '../../../core/ui/components/spinner/spinner.component';
@@ -354,7 +354,7 @@ export class DeductionsListComponent implements OnInit {
   viewModalVisible = false;
   selectedDeduction: any = null;
 
-  constructor(private sb: SupabaseService) {}
+  constructor(private sb: SupabaseService, private router: Router) {}
 
   async ngOnInit() {
     await Promise.all([
@@ -419,12 +419,12 @@ export class DeductionsListComponent implements OnInit {
   }
 
   navigateToNew() {
-    window.location.href = '/deductions/new';
+    this.router.navigate(['deductions', 'new']);
   }
 
   editDeduction(deduction: any) {
     if (deduction.id) {
-      window.location.href = `/deductions/edit/${deduction.id}`;
+      this.router.navigate(['deductions', 'edit', deduction.id]);
     }
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RequestStatus, RequestStatusService } from '../../../core/services/request-status.service';
 import { SpinnerComponent } from '../../../core/ui/components/spinner/spinner.component';
@@ -308,7 +308,10 @@ export class RequestStatusListComponent implements OnInit {
   viewModalVisible = false;
   selectedStatus: RequestStatus | null = null;
 
-  constructor(private requestStatusService: RequestStatusService) {}
+  constructor(
+    private requestStatusService: RequestStatusService,
+    private router: Router,
+  ) {}
 
   async ngOnInit() {
     await this.loadStatuses();
@@ -349,13 +352,12 @@ export class RequestStatusListComponent implements OnInit {
   }
 
   navigateToNew() {
-    // This will be handled by router navigation
-    window.location.href = '/request-statuses/new';
+    this.router.navigate(['request-statuses', 'new']);
   }
 
   editStatus(status: RequestStatus) {
     if (status.id) {
-      window.location.href = `/request-statuses/edit/${status.id}`;
+      this.router.navigate(['request-statuses', 'edit', status.id]);
     }
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/supabase.service';
 import { SpinnerComponent } from '../../../core/ui/components/spinner/spinner.component';
@@ -445,7 +445,7 @@ export class BranchesListComponent implements OnInit {
   viewModalVisible = false;
   selectedBranch: any = null;
 
-  constructor(private sb: SupabaseService) {}
+  constructor(private sb: SupabaseService, private router: Router) {}
 
   async ngOnInit() {
     await this.loadBranches();
@@ -490,12 +490,12 @@ export class BranchesListComponent implements OnInit {
   }
 
   navigateToNew() {
-    window.location.href = '/branches/new';
+    this.router.navigate(['branches', 'new']);
   }
 
   editBranch(branch: any) {
     if (branch.id) {
-      window.location.href = `/branches/edit/${branch.id}`;
+      this.router.navigate(['branches', 'edit', branch.id]);
     }
   }
 

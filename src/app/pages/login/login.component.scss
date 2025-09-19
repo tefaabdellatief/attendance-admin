@@ -8,6 +8,21 @@
   background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
+/* Use dynamic viewport units on modern mobile browsers to avoid toolbars cutting content */
+@supports (min-height: 100dvh) {
+  .login-page {
+    min-height: 100dvh;
+  }
+}
+
+/* Respect notches and safe areas */
+.login-page {
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+}
+
 .login-center {
   width: 100%;
   max-width: 450px;
@@ -159,6 +174,7 @@ button {
   box-shadow: 0 4px 16px rgba(246, 184, 25, 0.3);
   position: relative;
   overflow: hidden;
+  min-height: 48px; /* Better tap target on mobile */
 }
 
 button::before {
@@ -239,11 +255,13 @@ button[disabled]:hover {
   }
   
   .login-center {
-    max-width: 100%;
+    max-width: 420px;
   }
   
   .login-container {
     padding: 32px 24px;
+    border-radius: 16px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   }
   
   .login-container h2 {
@@ -258,6 +276,7 @@ button[disabled]:hover {
   
   input {
     padding: 14px 45px 14px 18px;
+    font-size: 16px; /* Prevent iOS zoom */
   }
   
   button {
@@ -272,17 +291,19 @@ button[disabled]:hover {
   }
   
   .login-container {
-    padding: 24px 20px;
+    padding: 20px 16px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
   }
   
   .login-container h2 {
-    font-size: 1.5rem;
-    margin-bottom: 24px;
+    font-size: 1.35rem;
+    margin-bottom: 20px;
   }
   
   .brand .logo {
-    width: 80px;
-    height: 80px;
+    width: 72px;
+    height: 72px;
   }
   
   .form-group {
@@ -290,13 +311,49 @@ button[disabled]:hover {
   }
   
   input {
-    padding: 12px 40px 12px 16px;
-    font-size: 0.95rem;
+    padding: 12px 40px 12px 14px;
+    font-size: 16px; /* Prevent iOS zoom */
   }
   
   button {
     padding: 14px;
     font-size: 0.95rem;
+    min-height: 48px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .login-container {
+    padding: 16px 12px;
+    border-radius: 12px;
+  }
+  .login-container h2 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+  }
+  .brand .logo {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* Landscape phones with limited height */
+@media (max-height: 480px) and (orientation: landscape) {
+  .login-page {
+    align-items: flex-start;
+  }
+  .login-center {
+    margin-top: 12px;
+  }
+  .login-container {
+    padding: 16px 14px;
+  }
+  .login-container h2 {
+    margin-bottom: 12px;
+  }
+  .form-group {
+    margin-bottom: 14px;
   }
 }
 

@@ -6,11 +6,12 @@ import { SupabaseService } from '../../../core/supabase.service';
 import { SpinnerComponent } from '../../../core/ui/components/spinner/spinner.component';
 import { ButtonComponent } from '../../../core/ui/components/button/button.component';
 import { CardComponent } from '../../../core/ui/components/card/card.component';
+import { ImageViewerComponent } from '../../../core/ui/components/image-viewer/image-viewer.component';
 
 @Component({
   selector: 'app-users-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SpinnerComponent, ButtonComponent, CardComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SpinnerComponent, ButtonComponent, CardComponent, ImageViewerComponent],
   template: `
     <div class="page-header">
       <div class="header-content">
@@ -157,7 +158,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                 <h5>صورة المستخدم</h5>
                 <div class="image-upload-section">
                   <div class="current-image" *ngIf="user.reference_image && !imagePreviews.reference_image">
-                    <img [src]="user.reference_image" alt="صورة المستخدم الحالية" class="document-image">
+                    <img [src]="user.reference_image" alt="صورة المستخدم الحالية" class="document-image clickable" (click)="openImageViewer(user.reference_image)">
                     <button type="button" class="remove-image-btn" (click)="removeImage('reference_image')">×</button>
                   </div>
                   <div class="image-upload" *ngIf="!user.reference_image && !imagePreviews.reference_image">
@@ -173,7 +174,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                     </label>
                   </div>
                   <div class="image-preview" *ngIf="imagePreviews.reference_image">
-                    <img [src]="imagePreviews.reference_image" alt="معاينة الصورة" class="preview-image">
+                    <img [src]="imagePreviews.reference_image" alt="معاينة الصورة" class="preview-image clickable" (click)="openImageViewer(imagePreviews.reference_image)">
                     <button type="button" class="remove-preview-btn" (click)="removePreview('reference_image')">×</button>
                   </div>
                 </div>
@@ -184,7 +185,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                 <h5>صورة الهوية الأمامية</h5>
                 <div class="image-upload-section">
                   <div class="current-image" *ngIf="user.front_id_image && !imagePreviews.front_id_image">
-                    <img [src]="user.front_id_image" alt="صورة الهوية الأمامية" class="document-image">
+                    <img [src]="user.front_id_image" alt="صورة الهوية الأمامية" class="document-image clickable" (click)="openImageViewer(user.front_id_image)">
                     <button type="button" class="remove-image-btn" (click)="removeImage('front_id_image')">×</button>
                   </div>
                   <div class="image-upload" *ngIf="!user.front_id_image && !imagePreviews.front_id_image">
@@ -200,7 +201,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                     </label>
                   </div>
                   <div class="image-preview" *ngIf="imagePreviews.front_id_image">
-                    <img [src]="imagePreviews.front_id_image" alt="معاينة الصورة" class="preview-image">
+                    <img [src]="imagePreviews.front_id_image" alt="معاينة الصورة" class="preview-image clickable" (click)="openImageViewer(imagePreviews.front_id_image)">
                     <button type="button" class="remove-preview-btn" (click)="removePreview('front_id_image')">×</button>
                   </div>
                 </div>
@@ -211,7 +212,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                 <h5>صورة الهوية الخلفية</h5>
                 <div class="image-upload-section">
                   <div class="current-image" *ngIf="user.back_id_image && !imagePreviews.back_id_image">
-                    <img [src]="user.back_id_image" alt="صورة الهوية الخلفية" class="document-image">
+                    <img [src]="user.back_id_image" alt="صورة الهوية الخلفية" class="document-image clickable" (click)="openImageViewer(user.back_id_image)">
                     <button type="button" class="remove-image-btn" (click)="removeImage('back_id_image')">×</button>
                   </div>
                   <div class="image-upload" *ngIf="!user.back_id_image && !imagePreviews.back_id_image">
@@ -227,7 +228,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                     </label>
                   </div>
                   <div class="image-preview" *ngIf="imagePreviews.back_id_image">
-                    <img [src]="imagePreviews.back_id_image" alt="معاينة الصورة" class="preview-image">
+                    <img [src]="imagePreviews.back_id_image" alt="معاينة الصورة" class="preview-image clickable" (click)="openImageViewer(imagePreviews.back_id_image)">
                     <button type="button" class="remove-preview-btn" (click)="removePreview('back_id_image')">×</button>
                   </div>
                 </div>
@@ -238,7 +239,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                 <h5>صورة الفيش</h5>
                 <div class="image-upload-section">
                   <div class="current-image" *ngIf="user.feesh_image && !imagePreviews.feesh_image">
-                    <img [src]="user.feesh_image" alt="صورة الفيش" class="document-image">
+                    <img [src]="user.feesh_image" alt="صورة الفيش" class="document-image clickable" (click)="openImageViewer(user.feesh_image)">
                     <button type="button" class="remove-image-btn" (click)="removeImage('feesh_image')">×</button>
                   </div>
                   <div class="image-upload" *ngIf="!user.feesh_image && !imagePreviews.feesh_image">
@@ -254,7 +255,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                     </label>
                   </div>
                   <div class="image-preview" *ngIf="imagePreviews.feesh_image">
-                    <img [src]="imagePreviews.feesh_image" alt="معاينة الصورة" class="preview-image">
+                    <img [src]="imagePreviews.feesh_image" alt="معاينة الصورة" class="preview-image clickable" (click)="openImageViewer(imagePreviews.feesh_image)">
                     <button type="button" class="remove-preview-btn" (click)="removePreview('feesh_image')">×</button>
                   </div>
                 </div>
@@ -265,7 +266,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                 <h5>الشهادة الطبية</h5>
                 <div class="image-upload-section">
                   <div class="current-image" *ngIf="user.medical_certificate_image && !imagePreviews.medical_certificate_image">
-                    <img [src]="user.medical_certificate_image" alt="الشهادة الطبية" class="document-image">
+                    <img [src]="user.medical_certificate_image" alt="الشهادة الطبية" class="document-image clickable" (click)="openImageViewer(user.medical_certificate_image)">
                     <button type="button" class="remove-image-btn" (click)="removeImage('medical_certificate_image')">×</button>
                   </div>
                   <div class="image-upload" *ngIf="!user.medical_certificate_image && !imagePreviews.medical_certificate_image">
@@ -281,7 +282,7 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
                     </label>
                   </div>
                   <div class="image-preview" *ngIf="imagePreviews.medical_certificate_image">
-                    <img [src]="imagePreviews.medical_certificate_image" alt="معاينة الصورة" class="preview-image">
+                    <img [src]="imagePreviews.medical_certificate_image" alt="معاينة الصورة" class="preview-image clickable" (click)="openImageViewer(imagePreviews.medical_certificate_image)">
                     <button type="button" class="remove-preview-btn" (click)="removePreview('medical_certificate_image')">×</button>
                   </div>
                 </div>
@@ -357,6 +358,14 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
         </form>
       </app-card>
     </div>
+    
+    <!-- Global Image Viewer for Users Form -->
+    <app-image-viewer
+      [visible]="imageViewerVisible"
+      [src]="imageViewerSrc"
+      [alt]="'صورة الوثيقة'"
+      (close)="closeImageViewer()">
+    </app-image-viewer>
   `,
   styles: [`
     .page-header {
@@ -807,6 +816,10 @@ export class UsersFormComponent implements OnInit {
     medical_certificate_image: null
   };
 
+  // Image viewer state
+  imageViewerVisible = false;
+  imageViewerSrc: string | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -893,6 +906,16 @@ export class UsersFormComponent implements OnInit {
   removePreview(imageType: string) {
     this.imagePreviews[imageType] = null;
     // Don't clear user[imageType] here as it might contain the original saved image
+  }
+
+  openImageViewer(src: string) {
+    this.imageViewerSrc = src;
+    this.imageViewerVisible = true;
+  }
+
+  closeImageViewer() {
+    this.imageViewerVisible = false;
+    this.imageViewerSrc = null;
   }
 
   async onSubmit() {

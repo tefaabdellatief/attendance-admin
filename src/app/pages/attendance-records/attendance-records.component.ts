@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../core/supabase.service';
 import { ButtonComponent } from '../../core/ui/components/button/button.component';
 import { EnhancedSearchComponent } from '../../core/ui/components/enhanced-search/enhanced-search.component';
+import { ImageViewerComponent } from '../../core/ui/components/image-viewer/image-viewer.component';
 
 @Component({
   selector: 'app-attendance-records',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonComponent, EnhancedSearchComponent],
+  imports: [CommonModule, FormsModule, ButtonComponent, EnhancedSearchComponent, ImageViewerComponent],
   template: `
     <h2>سجلات الحضور</h2>
     <div class="actions-bar">
@@ -219,10 +220,10 @@ import { EnhancedSearchComponent } from '../../core/ui/components/enhanced-searc
           <td>{{ r.recorded_at | date:'short' }}</td>
           <td>
             <ng-container *ngIf="imageSrc(r.image_url) as src; else noimg">
-              <a [href]="src" target="_blank" rel="noopener" class="img-link" title="فتح الصورة في تبويب جديد">
+              <button type="button" class="thumb-btn" (click)="openImageViewer(src)">
                 <img *ngIf="showThumbnails" [src]="src" alt="thumb" class="thumb" />
-                <span *ngIf="!showThumbnails" class="open-img-text">فتح الصورة</span>
-              </a>
+                <span *ngIf="!showThumbnails" class="open-img-text">عرض الصورة</span>
+              </button>
             </ng-container>
             <ng-template #noimg>-</ng-template>
           </td>
@@ -260,6 +261,14 @@ import { EnhancedSearchComponent } from '../../core/ui/components/enhanced-searc
     </table>
     </div>
     <p *ngIf="!loading && selectedUserId && !filteredItems.length && !error">لا يوجد سجلات.</p>
+
+    <!-- Image Viewer Modal -->
+    <app-image-viewer
+      [visible]="imageViewerVisible"
+      [src]="imageViewerSrc"
+      [alt]="'صورة سجل الحضور'"
+      (close)="closeImageViewer()">
+    </app-image-viewer>
   `,
   styles: [`
     :host {
@@ -314,6 +323,7 @@ import { EnhancedSearchComponent } from '../../core/ui/components/enhanced-searc
     .action-buttons { display: flex; gap: 0.5rem; justify-content: flex-end; }
     .btn-icon { margin-left: 0.25rem; }
     .thumb { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color); }
+    .thumb-btn { background: none; border: none; padding: 0; margin: 0; cursor: zoom-in; }
     .img-link { text-decoration: none; color: inherit; }
     .open-img-text { padding: 4px 8px; background: #f1f5f9; border-radius: 6px; border: 1px solid var(--border-color); font-size: .85rem; color: #334155; }
     .map-link { margin-inline-start: 8px; padding: 2px 6px; background: #e8f3ff; border: 1px solid #cfe3ff; border-radius: 6px; color: #0b5ed7; font-weight: 600; font-size: .8rem; text-decoration: none; }
@@ -383,6 +393,8 @@ export class AttendanceRecordsComponent implements OnInit {
   selectedMonth: string = ''; // format: YYYY-MM
   private serverFiltered = false;
   showThumbnails = true;
+  imageViewerVisible = false;
+  imageViewerSrc: string | null = null;
 
   editMode = false;
   editingId: string | null = null;
@@ -683,5 +695,15 @@ export class AttendanceRecordsComponent implements OnInit {
     if (lat == null || lng == null) return '';
     const qs = `${lat},${lng}`;
     return `https://www.google.com/maps?q=${encodeURIComponent(qs)}`;
+  }
+
+  openImageViewer(src: string) {
+    this.imageViewerSrc = src;
+    this.imageViewerVisible = true;
+  }
+
+  closeImageViewer() {
+    this.imageViewerVisible = false;
+    this.imageViewerSrc = null;
   }
 }

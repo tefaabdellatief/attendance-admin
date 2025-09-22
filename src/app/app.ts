@@ -56,6 +56,22 @@ import { PageTransitionDirective } from './core/ui/directives/page-transition.di
             <span class="icon">🏷️</span>
             <span>حالات الطلبات</span>
           </a>
+          <a routerLink="/inventory" *ngIf="isLoggedIn()" routerLinkActive="active" (click)="closeSidebarOnMobile()">
+            <span class="icon">📦</span>
+            <span>المخزون</span>
+          </a>
+          <a routerLink="/branch-inventory" *ngIf="isLoggedIn()" routerLinkActive="active" (click)="closeSidebarOnMobile()">
+            <span class="icon">🏬</span>
+            <span>مخزون الفروع</span>
+          </a>
+          <a routerLink="/inventory-transfer" *ngIf="isLoggedIn()" routerLinkActive="active" (click)="closeSidebarOnMobile()">
+            <span class="icon">🔀</span>
+            <span>تحويل المخزون</span>
+          </a>
+          <a routerLink="/inventory-transactions" *ngIf="isLoggedIn()" routerLinkActive="active" (click)="closeSidebarOnMobile()">
+            <span class="icon">🧾</span>
+            <span>سجل المخزون</span>
+          </a>
           <div class="menu-section" *ngIf="isLoggedIn()">
             <div class="menu-header">
               <span class="icon">📊</span>

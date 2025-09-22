@@ -5,6 +5,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AttendanceRecordsComponent } from './pages/attendance-records/attendance-records.component';
 import { EmployeeMonthlyReportComponent } from './pages/employee-monthly-report/employee-monthly-report.component';
 import { InstantSalaryCalculatorComponent } from './pages/instant-salary-calculator/instant-salary-calculator.component';
+import { InventoryTransactionsComponent } from './pages/inventory-transactions/inventory-transactions.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -21,6 +22,32 @@ export const routes: Routes = [
       { 
         path: 'attendance-types', 
         loadChildren: () => import('./pages/attendance-types/attendance-types.module').then(m => m.AttendanceTypesModule)
+      },
+      { 
+        path: 'inventory', 
+        loadChildren: () => import('./pages/inventory/inventory.module').then(m => m.InventoryModule)
+      },
+      {
+        path: 'inventory-transfer',
+        loadComponent: () => import('./pages/inventory-transfer/inventory-transfer.component').then(m => m.InventoryTransferComponent)
+      },
+      { path: 'inventory-transactions', component: InventoryTransactionsComponent },
+      {
+        path: 'branch-inventory',
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./pages/branch-inventory/branch-inventory-list/branch-inventory-list.component').then(m => m.BranchInventoryListComponent)
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./pages/branch-inventory/branch-inventory-form/branch-inventory-form.component').then(m => m.BranchInventoryFormComponent)
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () => import('./pages/branch-inventory/branch-inventory-form/branch-inventory-form.component').then(m => m.BranchInventoryFormComponent)
+          }
+        ]
       },
       { path: 'attendance-records', component: AttendanceRecordsComponent },
       { 

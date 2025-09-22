@@ -34,15 +34,23 @@
                 [(ngModel)]="passcode" 
                 name="passcode" 
                 id="passcode"
-                type="password" 
+                [type]="showPasscode ? 'text' : 'password'"
                 placeholder="أدخل كلمة المرور"
                 autocomplete="current-password"
                 required 
               />
+              <button type="button"
+                      class="toggle-btn"
+                      (click)="togglePasscodeVisibility()"
+                      [attr.aria-pressed]="showPasscode"
+                      [attr.aria-label]="showPasscode ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'"
+                      [title]="showPasscode ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'">
+                {{ showPasscode ? '👁️‍🗨️' : '👁️' }}
+              </button>
             </div>
           </div>
 
-          <button [disabled]="loading || !form.form.valid" type="submit">
+          <button class="submit-btn" [disabled]="loading || !form.form.valid" type="submit">
             <span *ngIf="loading" class="spinner"></span>
             {{ loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول' }}
           </button>

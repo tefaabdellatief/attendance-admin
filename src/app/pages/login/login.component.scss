@@ -142,6 +142,24 @@ input {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Small eye toggle button */
+.toggle-btn {
+  position: absolute;
+  left: 12px; /* RTL: place on left side */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--muted-text);
+  padding: 4px;
+  line-height: 1;
+  border-radius: 6px;
+}
+
+.toggle-btn:hover {
+  background: rgba(0,0,0,0.04);
+}
+
 input:hover {
   border-color: var(--color-primary);
   box-shadow: 0 4px 12px rgba(246, 184, 25, 0.1);
@@ -159,7 +177,7 @@ input::placeholder {
   font-weight: 400;
 }
 
-button {
+.submit-btn {
   margin-top: 32px;
   width: 100%;
   padding: 18px;
@@ -177,7 +195,7 @@ button {
   min-height: 48px; /* Better tap target on mobile */
 }
 
-button::before {
+.submit-btn::before {
   content: '';
   position: absolute;
   top: 0;
@@ -188,29 +206,29 @@ button::before {
   transition: left 0.5s;
 }
 
-button:hover::before {
+.submit-btn:hover::before {
   left: 100%;
 }
 
-button:hover {
+.submit-btn:hover {
   filter: brightness(1.05);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(246, 184, 25, 0.4);
 }
 
-button:active {
+.submit-btn:active {
   transform: translateY(0);
   box-shadow: 0 4px 16px rgba(246, 184, 25, 0.3);
 }
 
-button[disabled] {
+.submit-btn[disabled] {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
   box-shadow: 0 2px 8px rgba(246, 184, 25, 0.2);
 }
 
-button[disabled]:hover {
+.submit-btn[disabled]:hover {
   transform: none;
   filter: none;
   box-shadow: 0 2px 8px rgba(246, 184, 25, 0.2);
@@ -279,7 +297,7 @@ button[disabled]:hover {
     font-size: 16px; /* Prevent iOS zoom */
   }
   
-  button {
+  .submit-btn {
     padding: 16px;
     font-size: 1rem;
   }
@@ -315,7 +333,7 @@ button[disabled]:hover {
     font-size: 16px; /* Prevent iOS zoom */
   }
   
-  button {
+  .submit-btn {
     padding: 14px;
     font-size: 0.95rem;
     min-height: 48px;

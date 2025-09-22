@@ -16,6 +16,7 @@ import { FlashMessageService, FlashType } from '../../core/ui/services/flash-mes
 export class LoginComponent implements OnInit {
   identifier = '';
   passcode = '';
+  showPasscode = false;
   loading = false; // Keep for local button state
   error = '';
   flashMessage: string | null = null;
@@ -62,5 +63,9 @@ export class LoginComponent implements OnInit {
       this.loading = false;
       this.loadingService.hide();
     }
+  }
+
+  togglePasscodeVisibility() {
+    this.showPasscode = !this.showPasscode;
   }
 }

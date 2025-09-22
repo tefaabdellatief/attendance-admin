@@ -295,15 +295,24 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
               <div class="form-group">
                 <label for="passcode" *ngIf="!userId">كود المرور <span class="required">*</span></label>
                 <label for="passcode" *ngIf="userId">كود المرور الجديد</label>
-                <input 
-                  type="password" 
-                  id="passcode" 
-                  name="passcode" 
-                  [(ngModel)]="user.passcode" 
-                  [required]="!userId"
-                  class="form-control"
-                  placeholder="أدخل كود المرور"
-                  [class.is-invalid]="submitted && userForm.controls['passcode'].errors">
+                <div class="input-with-toggle">
+                  <input 
+                    [type]="showPasscode ? 'text' : 'password'" 
+                    id="passcode" 
+                    name="passcode" 
+                    [(ngModel)]="user.passcode" 
+                    [required]="!userId"
+                    class="form-control"
+                    placeholder="أدخل كود المرور"
+                    [class.is-invalid]="submitted && userForm.controls['passcode'].errors">
+                  <button type="button"
+                          class="toggle-btn"
+                          (click)="togglePasscodeVisibility()"
+                          [attr.aria-pressed]="showPasscode"
+                          [title]="showPasscode ? 'إخفاء كود المرور' : 'إظهار كود المرور'">
+                    {{ showPasscode ? '👁️‍🗨️' : '👁️' }}
+                  </button>
+                </div>
                 <div class="invalid-feedback" *ngIf="submitted && userForm.controls['passcode'].errors">
                   كود المرور مطلوب
                 </div>
@@ -740,6 +749,26 @@ import { CardComponent } from '../../../core/ui/components/card/card.component';
         height: 100px;
       }
     }
+
+    /* Passcode toggle styles */
+    .input-with-toggle {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-with-toggle .toggle-btn {
+      position: absolute;
+      left: 10px; /* RTL: place on left */
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--muted-text);
+      padding: 4px;
+      line-height: 1;
+      border-radius: 6px;
+    }
+    .input-with-toggle .toggle-btn:hover { background: rgba(0,0,0,0.04); }
   `]
 })
 export class UsersFormComponent implements OnInit {
@@ -760,6 +789,9 @@ export class UsersFormComponent implements OnInit {
     feesh_image: null,
     medical_certificate_image: null
   };
+
+  // Show/hide passcode
+  showPasscode = false;
   shifts: any[] = [];
   userId: string | null = null;
   loading = false;
@@ -787,6 +819,10 @@ export class UsersFormComponent implements OnInit {
     if (this.userId) {
       await this.loadUser();
     }
+  }
+
+  togglePasscodeVisibility() {
+    this.showPasscode = !this.showPasscode;
   }
 
   async loadShifts() {

@@ -291,14 +291,14 @@ input:focus, select:focus, textarea:focus {
   border-radius: 6px;
 }
 
-/* App Shell (Sidebar + Topbar) */
-.app-shell {
+/* App Shell (Sidebar + Topbar) - LEGACY (scoped to .legacy-shell to avoid conflicts) */
+.legacy-shell {
   min-height: 100vh;
   display: block; /* we'll manage layout with fixed sidebar + margins */
   background: #f6f8fb;
 }
 
-.sidebar {
+.legacy-sidebar {
   background: var(--color-primary-dark);
   color: #fff;
   display: flex;
@@ -309,7 +309,7 @@ input:focus, select:focus, textarea:focus {
   width: 260px;
   padding-bottom: 24px; /* ensure footer isn't clipped */
 }
-.sidebar .brand {
+.legacy-sidebar .brand {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -319,7 +319,7 @@ input:focus, select:focus, textarea:focus {
   padding: 16px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.sidebar .brand img { 
+.legacy-sidebar .brand img { 
   width: 48px; 
   height: 48px; 
   object-fit: contain; 
@@ -327,11 +327,11 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease;
 }
-.sidebar .brand img:hover {
+.legacy-sidebar .brand img:hover {
   transform: scale(1.05);
 }
-.sidebar .menu { display: flex; flex-direction: column; gap: 6px; }
-.sidebar .menu a {
+.legacy-sidebar .menu { display: flex; flex-direction: column; gap: 6px; }
+.legacy-sidebar .menu a {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -340,11 +340,11 @@ input:focus, select:focus, textarea:focus {
   color: #e5f2ef;
   border-radius: 8px;
 }
-.sidebar .menu a.active, .sidebar .menu a:hover {
+.legacy-sidebar .menu a.active, .legacy-sidebar .menu a:hover {
   background: rgba(246, 184, 25, 0.2);
   color: #fff;
 }
-.sidebar .sidebar-footer {
+.legacy-sidebar .sidebar-footer {
   margin-top: auto;
   position: sticky;
   bottom: 12px;
@@ -353,7 +353,7 @@ input:focus, select:focus, textarea:focus {
   width: 100%;
   padding-bottom: 8px;
 }
-.sidebar .logout { 
+.legacy-sidebar .logout { 
   width: 100%; 
   background: #fff; 
   color: var(--color-primary-dark);
@@ -486,9 +486,9 @@ input:focus, select:focus, textarea:focus {
 }
 .progress > span { display: block; height: 100%; background: var(--color-primary); width: 50%; }
 
-/* Desktop collapsible sidebar - same behavior as mobile */
+/* Desktop collapsible sidebar - legacy */
 @media (min-width: 1025px) {
-  .sidebar { 
+  .legacy-sidebar-container .legacy-sidebar { 
     position: fixed; 
     top: 0; 
     bottom: 0; 
@@ -498,19 +498,19 @@ input:focus, select:focus, textarea:focus {
     transition: transform .25s ease; 
     z-index: 1001; 
   }
-  .sidebar.open { transform: translateX(0); }
+  .legacy-sidebar-container .legacy-sidebar.open { transform: translateX(0); }
   .main-area { margin-left: 0; }
   /* RTL flips to right */
-  [dir='rtl'] .sidebar { left: auto !important; right: 0 !important; transform: translateX(100%); }
-  [dir='rtl'] .sidebar.open { transform: translateX(0); }
+  [dir='rtl'] .legacy-sidebar-container .legacy-sidebar { left: auto !important; right: 0 !important; transform: translateX(100%); }
+  [dir='rtl'] .legacy-sidebar-container .legacy-sidebar.open { transform: translateX(0); }
   [dir='rtl'] .main-area { margin-left: 0; margin-right: 0; }
   .sidebar-overlay { display: none; }
   .sidebar-overlay.show { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 1000; }
 }
 
-/* Mobile/Tablet sidebar behavior */
+/* Mobile/Tablet sidebar behavior - legacy */
 @media (max-width: 1024px) {
-  .sidebar { 
+  .legacy-sidebar-container .legacy-sidebar { 
     position: fixed; 
     top: 0; 
     bottom: 0; 
@@ -520,10 +520,10 @@ input:focus, select:focus, textarea:focus {
     transition: transform .25s ease; 
     z-index: 1001; 
   }
-  .sidebar.open { transform: translateX(0); }
+  .legacy-sidebar-container .legacy-sidebar.open { transform: translateX(0); }
   /* RTL flips to right */
-  [dir='rtl'] .sidebar { left: auto !important; right: 0 !important; transform: translateX(100%); }
-  [dir='rtl'] .sidebar.open { transform: translateX(0); }
+  [dir='rtl'] .legacy-sidebar-container .legacy-sidebar { left: auto !important; right: 0 !important; transform: translateX(100%); }
+  [dir='rtl'] .legacy-sidebar-container .legacy-sidebar.open { transform: translateX(0); }
   .sidebar-overlay { display: none; }
   .sidebar-overlay.show { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 1000; }
   .main-area { margin-left: 0; margin-right: 0; }
@@ -535,7 +535,6 @@ input:focus, select:focus, textarea:focus {
   .cards { grid-template-columns: 1fr; }
 }
 
-/* Arabic-specific enhancements */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
   font-weight: 600;

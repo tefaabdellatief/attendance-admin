@@ -27,6 +27,8 @@ import { DeleteConfirmationComponent } from '../../../core/ui/components/delete-
         <option [ngValue]="null">— اختر فرع —</option>
         <option *ngFor="let b of branches" [ngValue]="b.id">{{ b.name }}</option>
       </select>
+      <label for="search">بحث بالاسم</label>
+      <input id="search" type="text" [(ngModel)]="searchQuery" placeholder="اكتب اسم العنصر..." />
     </div>
 
     <app-spinner *ngIf="loading" [overlay]="false" message="جاري تحميل مخزون الفرع..."></app-spinner>
@@ -45,7 +47,7 @@ import { DeleteConfirmationComponent } from '../../../core/ui/components/delete-
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let r of stock">
+              <tr *ngFor="let r of filteredStock" [class.low-stock]="r.quantity <= 2">
                 <td>{{ getItemName(r.item_id) }}</td>
                 <td>{{ getItemUnit(r.item_id) }}</td>
                 <td>{{ r.quantity }}</td>
@@ -78,13 +80,14 @@ import { DeleteConfirmationComponent } from '../../../core/ui/components/delete-
   styles: [`
     .page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
     .page-subtitle{color:var(--muted-text)}
-    .filters{display:flex;gap:.5rem;align-items:center;margin:0 0 1rem}
-    .filters select{padding:.5rem .75rem;border:2px solid var(--border-color);border-radius:8px}
+    .filters{display:flex;gap:.5rem;align-items:center;margin:0 0 1rem;flex-wrap:wrap}
+    .filters select,.filters input{padding:.5rem .75rem;border:2px solid var(--border-color);border-radius:8px}
     .table-responsive{overflow:auto}
     table{width:100%;border-collapse:collapse}
     th,td{padding:12px;border-bottom:1px solid var(--border-color);text-align:right}
     thead th{background:#fafafa}
     .actions{display:flex;gap:.5rem}
+    tbody tr.low-stock td{ background: #fff5f5; color: #b71c1c; font-weight: 600; }
     .empty{text-align:center;color:var(--muted-text)}
   `]
 })
@@ -97,6 +100,7 @@ export class BranchInventoryListComponent implements OnInit {
   saving = false;
   deleteModalVisible = false;
   stockToDelete: any = null;
+  searchQuery = '';
 
   constructor(private sb: SupabaseService, private router: Router) {}
 
@@ -121,6 +125,12 @@ export class BranchInventoryListComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  get filteredStock() {
+    const q = (this.searchQuery || '').toLowerCase().trim();
+    if (!q) return this.stock;
+    return this.stock.filter(r => (this.getItemName(r.item_id) || '').toLowerCase().includes(q));
   }
 
   async loadItemsCatalog() {

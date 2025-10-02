@@ -1,0 +1,133 @@
+/* Root layout */
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f8f9fa;
+  direction: rtl;
+  font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-color);
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.layout__sidebar {
+  width: 280px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+  height: 100vh;
+  background: transparent;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
+
+/* Ensure the Angular host fills the fixed aside */
+.layout__sidebar > app-sidebar {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.layout__content {
+  flex: 1 1 auto;
+  min-height: 100vh;
+  padding-inline: clamp(16px, 3vw, 32px);
+  padding-block: clamp(16px, 3vw, 32px);
+  transition: margin-right 0.3s ease;
+}
+
+.layout__content.with-sidebar {
+  /* Reserve space on the right side */
+  margin-right: 280px;
+}
+
+.layout__content.no-sidebar {
+  margin-right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.layout__content-inner {
+  width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .layout__sidebar {
+    width: 240px;
+  }
+
+  .layout__content.with-sidebar {
+    margin-right: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .layout__sidebar {
+    position: fixed;
+    /* Keep visible; no off-screen translation */
+    transform: none;
+    width: min(280px, 85vw);
+    border-start-start-radius: 16px;
+    border-end-start-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.35s ease;
+  }
+
+  /* No open/closed sliding at the moment */
+  .layout__sidebar.open { transform: none; }
+
+  .layout__content,
+  .layout__content.with-sidebar,
+  .layout__content.no-sidebar {
+    /* On small screens the sidebar overlays; content should take full width */
+    margin: 0;
+    padding-inline: clamp(12px, 3vw, 20px);
+    padding-block: clamp(12px, 3vw, 20px);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 74, 58, 0.25);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 74, 58, 0.45);
+}
+
+:root {
+  --primary-color: #1a4a3a;
+  --secondary-color: #ffd700;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --border-color: #dee2e6;
+  --text-color: #343a40;
+  --muted-text: #6c757d;
+}

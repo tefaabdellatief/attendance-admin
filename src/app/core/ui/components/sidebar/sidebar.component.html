@@ -1,0 +1,70 @@
+<div class="sidebar" [class.sidebar--collapsed]="isCollapsed()">
+  <header class="sidebar__header">
+    <div class="sidebar__logo">
+      <div class="sidebar__brand-icon">🏢</div>
+      <div class="sidebar__brand" *ngIf="!isCollapsed()">
+        <span class="sidebar__brand-title">تحكم نخيل برجر</span>
+        <span class="sidebar__brand-subtitle">لوحة الإدارة</span>
+      </div>
+    </div>
+
+    <button type="button" class="sidebar__toggle" (click)="toggleSidebar()" [attr.aria-expanded]="!isCollapsed()">
+      <span class="sidebar__toggle-icon">{{ isCollapsed() ? '☰' : '×' }}</span>
+    </button>
+  </header>
+
+  <section class="sidebar__profile" *ngIf="!isCollapsed()">
+    <div class="sidebar__avatar">{{ userInitials() }}</div>
+    <div class="sidebar__profile-info">
+      <div class="sidebar__profile-name">{{ userName() }}</div>
+      <div class="sidebar__profile-role">مدير النظام</div>
+    </div>
+  </section>
+
+  <nav class="sidebar__nav" role="navigation">
+    <ul class="sidebar__list" [class.sidebar__list--collapsed]="isCollapsed()">
+      <li
+        class="sidebar__item"
+        *ngFor="let item of menuItems; trackBy: trackById"
+        [class.sidebar__item--active]="isActive(item.route) || hasActiveChild(item)"
+      >
+        <ng-container *ngIf="!item.children; else grouped">
+          <a class="sidebar__link" [routerLink]="item.route" [title]="isCollapsed() ? item.title : null">
+            <span class="sidebar__icon">{{ item.icon }}</span>
+            <span class="sidebar__text" *ngIf="!isCollapsed()">{{ item.title }}</span>
+          </a>
+        </ng-container>
+
+        <ng-template #grouped>
+          <button
+            type="button"
+            class="sidebar__link sidebar__link--collapsible"
+            (click)="toggleGroup(item)"
+            [class.sidebar__link--expanded]="item.expanded"
+            [title]="isCollapsed() ? item.title : null"
+          >
+            <span class="sidebar__icon">{{ item.icon }}</span>
+            <span class="sidebar__text" *ngIf="!isCollapsed()">{{ item.title }}</span>
+            <span class="sidebar__chevron" *ngIf="!isCollapsed()">{{ item.expanded ? '▾' : '▸' }}</span>
+          </button>
+
+          <ul class="sidebar__children" *ngIf="item.expanded && !isCollapsed()">
+            <li class="sidebar__child" *ngFor="let child of item.children">
+              <a class="sidebar__child-link" [routerLink]="child.route" [class.sidebar__child-link--active]="isActive(child.route)">
+                <span class="sidebar__child-icon">{{ child.icon }}</span>
+                <span class="sidebar__child-text">{{ child.title }}</span>
+              </a>
+            </li>
+          </ul>
+        </ng-template>
+      </li>
+    </ul>
+  </nav>
+
+  <footer class="sidebar__footer" *ngIf="!isCollapsed()">
+    <button type="button" class="sidebar__logout" (click)="logout()">
+      <span class="sidebar__logout-icon">🚪</span>
+      <span>تسجيل الخروج</span>
+    </button>
+  </footer>
+</div>

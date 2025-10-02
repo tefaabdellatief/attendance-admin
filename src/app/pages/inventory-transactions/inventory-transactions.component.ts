@@ -34,6 +34,10 @@ import { CardComponent } from '../../core/ui/components/card/card.component';
           <option *ngFor="let i of itemsCatalog" [ngValue]="i.id">{{ i.name }} ({{ i.unit }})</option>
         </select>
       </div>
+      <div class="filter">
+        <label for="search">بحث بالاسم</label>
+        <input id="search" type="text" [(ngModel)]="searchQuery" placeholder="اكتب اسم العنصر أو الفرع..." />
+      </div>
       <app-button variant="primary" size="sm" (btnClick)="applyFilters()" [disabled]="loading">تطبيق</app-button>
       <app-button variant="outline" size="sm" (btnClick)="resetFilters()" [disabled]="loading">إعادة ضبط</app-button>
     </div>
@@ -54,7 +58,7 @@ import { CardComponent } from '../../core/ui/components/card/card.component';
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let t of transactions">
+            <tr *ngFor="let t of filteredTransactions">
               <td>{{ t.created_at | date:'short' }}</td>
               <td>{{ getBranchName(t.branch_id) }}</td>
               <td>{{ getItemName(t.item_id) }} ({{ getItemUnit(t.item_id) }})</td>
@@ -92,6 +96,7 @@ export class InventoryTransactionsComponent implements OnInit {
   branches: any[] = [];
   itemsCatalog: any[] = [];
   transactions: any[] = [];
+  searchQuery = '';
 
   branchId: string | null = null;
   itemId: string | null = null;
@@ -190,6 +195,16 @@ export class InventoryTransactionsComponent implements OnInit {
     this.branchId = null;
     this.itemId = null;
     this.loadAll();
+  }
+
+  get filteredTransactions() {
+    const q = (this.searchQuery || '').toLowerCase().trim();
+    if (!q) return this.transactions;
+    return this.transactions.filter(t => {
+      const b = this.getBranchName(t.branch_id).toLowerCase();
+      const i = this.getItemName(t.item_id).toLowerCase();
+      return b.includes(q) || i.includes(q);
+    });
   }
 
   getBranchName(id: string | null): string {

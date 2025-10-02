@@ -154,10 +154,21 @@ export class SupabaseService {
   async rpc(fn: string, params: any = {}) {
     try {
       console.log(`RPC Call: ${fn}`, params);
+      console.log(`RPC Call params type:`, typeof params);
+      console.log(`RPC Call params keys:`, Object.keys(params));
+      
       const { data, error } = await this.supabase.rpc(fn, params);
+      
+      console.log(`RPC Raw Response (${fn}):`, { data, error });
+      console.log(`RPC Data type:`, typeof data);
+      console.log(`RPC Data length:`, data?.length);
+      console.log(`RPC Error type:`, typeof error);
       
       if (error) {
         console.error(`RPC Error (${fn}):`, error);
+        console.error(`RPC Error message:`, error.message);
+        console.error(`RPC Error code:`, (error as any).code);
+        console.error(`RPC Error details:`, (error as any).details);
         return { data: null, error };
       }
       

@@ -37,8 +37,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "outputMode": "static",
-            "baseHref": "/attendance-admin/"
+            "outputMode": "static"
           },
           "configurations": {
             "production": {

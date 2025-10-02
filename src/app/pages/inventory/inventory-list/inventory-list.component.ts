@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { SupabaseService } from '../../../core/supabase.service';
 import { SpinnerComponent } from '../../../core/ui/components/spinner/spinner.component';
@@ -10,7 +11,7 @@ import { DeleteConfirmationComponent } from '../../../core/ui/components/delete-
 @Component({
   selector: 'app-inventory-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SpinnerComponent, ButtonComponent, CardComponent, DeleteConfirmationComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SpinnerComponent, ButtonComponent, CardComponent, DeleteConfirmationComponent],
   template: `
     <div class="page-header">
       <div class="header-content">
@@ -18,6 +19,11 @@ import { DeleteConfirmationComponent } from '../../../core/ui/components/delete-
         <p class="page-subtitle">إدارة عناصر المخزون (إضافة، تعديل، حذف)</p>
       </div>
       <app-button variant="primary" (btnClick)="navigateToNew()" [disabled]="loading">+ إضافة عنصر</app-button>
+    </div>
+
+    <div class="filters">
+      <label for="search">البحث بالاسم</label>
+      <input id="search" type="text" [(ngModel)]="searchQuery" (ngModelChange)="noop()" placeholder="اكتب اسم العنصر..." />
     </div>
 
     <app-spinner *ngIf="loading" [overlay]="false" message="جاري تحميل عناصر المخزون..."></app-spinner>
@@ -35,7 +41,7 @@ import { DeleteConfirmationComponent } from '../../../core/ui/components/delete-
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of items">
+            <tr *ngFor="let item of filteredItems">
               <td>{{ item.name }}</td>
               <td>{{ item.unit }}</td>
               <td>{{ item.description || '-' }}</td>
@@ -69,6 +75,8 @@ import { DeleteConfirmationComponent } from '../../../core/ui/components/delete-
   styles: [`
     .page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
     .page-subtitle{color:var(--muted-text)}
+    .filters{display:flex;gap:.5rem;align-items:center;margin:0 0 1rem}
+    .filters input{padding:.5rem .75rem;border:2px solid var(--border-color);border-radius:8px;min-width:260px}
     .table-responsive{overflow:auto}
     table{width:100%;border-collapse:collapse}
     th,td{padding:12px;border-bottom:1px solid var(--border-color);text-align:right}
@@ -83,6 +91,7 @@ export class InventoryListComponent implements OnInit {
   saving = false;
   deleteModalVisible = false;
   itemToDelete: any = null;
+  searchQuery = '';
 
   constructor(private sb: SupabaseService, private router: Router) {}
 
@@ -103,6 +112,14 @@ export class InventoryListComponent implements OnInit {
       this.loading = false;
     }
   }
+
+  get filteredItems() {
+    const q = (this.searchQuery || '').toLowerCase().trim();
+    if (!q) return this.items;
+    return this.items.filter(i => (i.name || '').toLowerCase().includes(q));
+  }
+
+  noop() {}
 
   navigateToNew() {
     this.router.navigate(['inventory','new']);
